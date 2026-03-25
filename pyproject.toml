@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "aeronavigator"
+version = "0.1.0"
+description = "Мониторинг воздушных судов через OpenSky API"
+authors = ["Viktor84-code <viktor84.code@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = ">=3.13"
+requests = "^2.31.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.0"
+pytest-cov = "^6.0.0"
+pytest-mock = "^3.12.0"
+black = "^24.0.0"
+isort = "^5.13.0"
+flake8 = "^7.0.0"
+mypy = "^1.8.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+python_version = "3.13"
+ignore_missing_imports = true
