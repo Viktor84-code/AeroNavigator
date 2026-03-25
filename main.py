@@ -7,7 +7,8 @@
 
 import sys
 from typing import List, Optional
-# from src.api.aeroplanes_api import AeroplanesAPI
+from api.aeroplanes_api import AeroplanesAPI
+from models.aeroplane import Aeroplane
 # from src.storage.json_storage import JSONStorage
 # from src.utils.helpers import (
 #     filter_by_country,
@@ -32,8 +33,8 @@ def user_interaction() -> None:
     print("\n✈️ Добро пожаловать в AeroNavigator!\n")
 
     # Шаг 1: создаём экземпляры классов (пока заглушки)
-    # api = AeroplanesAPI()
-    # storage = JSONStorage("data/flights.json")
+    api = AeroplanesAPI()
+    storage = JSONStorage("data/flights.json")
 
     # Шаг 2: запрос страны
     country = input("🌍 Введите название страны (на английском, например, 'Russia'): ").strip()
@@ -43,16 +44,16 @@ def user_interaction() -> None:
 
     print(f"\n🔍 Получаем данные о самолётах в воздушном пространстве {country}...")
 
-    # Шаг 3: получаем данные из API (пока заглушка)
-    # try:
-    #     aeroplanes_data = api.get_aeroplanes(country)
-    #     if not aeroplanes_data:
-    #         print("⚠️  Данные не получены. Возможно, API временно недоступно или страна не найдена.")
-    #         return
-    #     aeroplanes = Aeroplane.cast_to_object_list(aeroplanes_data)
-    # except Exception as e:
-    #     print(f"❌ Ошибка при получении данных: {e}")
-    #     return
+    # Шаг 3: получаем данные из API
+    try:
+        aeroplanes_data = api.get_aeroplanes(country)
+        if not aeroplanes_data:
+            print("⚠️  Данные не получены. Возможно, API временно недоступно или страна не найдена.")
+            return
+        aeroplanes = Aeroplane.cast_to_object_list(aeroplanes_data)
+    except Exception as e:
+        print(f"❌ Ошибка при получении данных: {e}")
+        return
 
     # Пока заглушка
     print("📡 (Заглушка) Данные получены. Сохраняем в JSON...")
