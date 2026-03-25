@@ -33,3 +33,66 @@ class JSONStorage:
                 return json.load(f)
         except (FileNotFoundError, json.JSONDecodeError):
             return []
+
+    def get(self, **criteria) -> List[dict]:
+        """
+        Получить данные из файла по критериям.
+
+        Критерии могут быть: country, altitude_min, altitude_max, velocity_min, velocity_max
+        """
+        data = self._load()
+        if not criteria:
+            return data
+
+        result = []
+        for item in data:
+            match = True
+            for key, value in criteria.items():
+                if key == "country":
+                    if item.get("country") != value:
+                        match = False
+                elif key == "altitude_min":
+                    if item.get("altitude", 0) < value:
+                        match = False
+                elif key == "altitude_max":
+                    if item.get("altitude", 0) > value:
+                        match = False
+                elif key == "velocity_min":
+                    if item.get("velocity", 0) < value:
+                        match = False
+                elif key == "velocity_max":
+                    if item.get("velocity", 0) > value:
+                        match = False
+                else:
+                    if item.get(key) != value:
+                        match = False
+            if match:
+                result.append(item)
+        return result
+
+    def delete(self, **criteria) -> int:
+        """
+        Удалить данные из файла по критериям.
+        Возвращает количество удалённых записей.
+        """
+        data = self._load()
+        if not criteria:
+            return 0
+
+        new_data = []
+        removed = 0
+        for item in data:
+            match = True
+            for key, value in criteria.items():
+                if item.get(key) != value:
+                    match = False
+                    break
+            if match:
+                removed += 1
+            else:
+                new_data.append(item)
+
+        with open(self._filename, "w", encoding="utf-8") as f:
+            json.dump(new_data, f, indent=2, ensure_ascii=False)
+        return removed
+
