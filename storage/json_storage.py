@@ -1,6 +1,7 @@
 import json
 from typing import List
 from models.aeroplane import Aeroplane
+from utils.logger_config import logger
 
 
 class JSONStorage:
@@ -12,6 +13,8 @@ class JSONStorage:
         existing = self._load()
         existing_icao = {a["icao24"] for a in existing}
 
+        added_count = 0  # Счетчик для отчета
+
         for a in aeroplanes:
             if a.icao24 not in existing_icao:
                 existing.append({
@@ -22,9 +25,13 @@ class JSONStorage:
                     "velocity": a.velocity
                 })
                 existing_icao.add(a.icao24)
+                added_count += 1
 
+        # Запись в файл
         with open(self._filename, "w", encoding="utf-8") as f:
             json.dump(existing, f, indent=2, ensure_ascii=False)
+
+        logger.info(f"Обновление БД: добавлено {added_count} новых бортов в {self._filename}")
 
     def _load(self) -> List[dict]:
         """Загружает данные из файла."""

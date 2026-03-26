@@ -1,4 +1,5 @@
 from typing import List, Dict, Any, Optional
+from utils.logger_config import logger
 
 
 class Aeroplane:
@@ -23,4 +24,7 @@ class Aeroplane:
                     altitude=item[7],
                     velocity=item[9]
                 ))
+
+        # (DEBUG — не лезет в консоль, но виден в файле)
+        logger.debug(f"Моделирование: создано {len(aeroplanes)} объектов из сырых данных")
         return aeroplanes
