@@ -1,4 +1,3 @@
-import pytest
 from models.aeroplane import Aeroplane
 
 
@@ -10,7 +9,7 @@ class TestAeroplane:
             callsign="AFL123",
             country="Russia",
             altitude=10000.0,
-            velocity=850.0
+            velocity=850.0,
         )
         assert plane.icao24 == "abc123"
         assert plane.callsign == "AFL123"
@@ -25,7 +24,7 @@ class TestAeroplane:
             callsign=None,
             country="Russia",
             altitude=10000.0,
-            velocity=850.0
+            velocity=850.0,
         )
         assert plane.callsign == "N/A"
 
@@ -36,7 +35,7 @@ class TestAeroplane:
             callsign="AFL123",
             country="Russia",
             altitude=None,
-            velocity=850.0
+            velocity=850.0,
         )
         assert plane.altitude == 0.0
 
@@ -47,7 +46,7 @@ class TestAeroplane:
             callsign="AFL123",
             country="Russia",
             altitude=10000.0,
-            velocity=None
+            velocity=None,
         )
         assert plane.velocity == 0.0
 
@@ -56,7 +55,7 @@ class TestAeroplane:
         data = [
             ["abc123", "AFL123", "Russia", 0, 0, 0, 0, 10000.0, 0, 850.0],
             ["def456", None, "USA", 0, 0, 0, 0, 12000.0, 0, 900.0],
-            ["short"]  # невалидный элемент
+            ["short"],  # невалидный элемент
         ]
         planes = Aeroplane.cast_to_object_list(data)
         assert len(planes) == 2
