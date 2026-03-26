@@ -1,5 +1,7 @@
+from typing import Any, Dict, List, Optional, Tuple
+
 import requests
-from typing import Dict, Any, List, Optional, Tuple
+
 from utils.logger_config import logger  # ПОДКЛЮЧАЕМ НАШ САМОПИСЕЦ
 
 
@@ -43,7 +45,7 @@ class AeroplanesAPI:
             "lamin": lat - 10,
             "lamax": lat + 10,
             "lomin": lon - 15,
-            "lomax": lon + 15
+            "lomax": lon + 15,
         }
         try:
             response = requests.get(self.opensky_url, params=bbox, timeout=10)

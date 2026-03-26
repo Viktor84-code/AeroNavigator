@@ -1,5 +1,6 @@
 import json
 from typing import List
+
 from models.aeroplane import Aeroplane
 from utils.logger_config import logger
 
@@ -17,13 +18,15 @@ class JSONStorage:
 
         for a in aeroplanes:
             if a.icao24 not in existing_icao:
-                existing.append({
-                    "icao24": a.icao24,
-                    "callsign": a.callsign,
-                    "country": a.country,
-                    "altitude": a.altitude,
-                    "velocity": a.velocity
-                })
+                existing.append(
+                    {
+                        "icao24": a.icao24,
+                        "callsign": a.callsign,
+                        "country": a.country,
+                        "altitude": a.altitude,
+                        "velocity": a.velocity,
+                    }
+                )
                 existing_icao.add(a.icao24)
                 added_count += 1
 
@@ -102,4 +105,3 @@ class JSONStorage:
         with open(self._filename, "w", encoding="utf-8") as f:
             json.dump(new_data, f, indent=2, ensure_ascii=False)
         return removed
-

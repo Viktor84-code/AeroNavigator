@@ -1,6 +1,13 @@
 import pytest
-from utils.helpers import filter_by_country, filter_by_altitude, sort_by_altitude, get_top_n
+
 from models.aeroplane import Aeroplane
+from utils.helpers import (
+    filter_by_altitude,
+    filter_by_country,
+    get_top_n,
+    sort_by_altitude,
+)
+
 
 @pytest.fixture
 def sample_planes():
@@ -8,8 +15,9 @@ def sample_planes():
     return [
         Aeroplane("abc1", "AFL123", "Russia", 10000.0, 800.0),
         Aeroplane("def2", "LOT456", "Poland", 5000.0, 400.0),
-        Aeroplane("ghi3", "N45", "USA", 12000.0, 900.0)
+        Aeroplane("ghi3", "N45", "USA", 12000.0, 900.0),
     ]
+
 
 def test_filter_by_country(sample_planes):
     """Проверка фильтра по странам."""
@@ -17,16 +25,19 @@ def test_filter_by_country(sample_planes):
     assert len(result) == 1
     assert result[0].callsign == "AFL123"
 
+
 def test_filter_by_altitude(sample_planes):
     """Проверка фильтра по высоте."""
     result = filter_by_altitude(sample_planes, 4000, 6000)
     assert len(result) == 1
     assert result[0].country == "Poland"
 
+
 def test_sort_by_altitude(sample_planes):
     """Проверка сортировки по убыванию."""
     result = sort_by_altitude(sample_planes)
     assert result[0].altitude == 12000.0
+
 
 def test_get_top_n(sample_planes):
     """Проверка среза топ-N."""

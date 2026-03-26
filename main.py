@@ -5,15 +5,16 @@
 """
 
 import sys
+
 from api.aeroplanes_api import AeroplanesAPI
 from models.aeroplane import Aeroplane
 from storage.json_storage import JSONStorage
 from utils.helpers import (
-    filter_by_country,
     filter_by_altitude,
-    sort_by_altitude,
+    filter_by_country,
     get_top_n,
-    print_aeroplanes
+    print_aeroplanes,
+    sort_by_altitude,
 )
 from utils.logger_config import logger
 
@@ -67,7 +68,7 @@ def user_interaction() -> None:
 
     except Exception as e:
         logger.error(f"Критический сбой в цикле получения данных: {e}", exc_info=True)
-        print(f"❌ Системная ошибка. Подробности в logs/navigator.log")
+        print("❌ Системная ошибка. Подробности в logs/navigator.log")
         return
 
     # Работа с пользовательскими фильтрами

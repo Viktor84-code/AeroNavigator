@@ -1,8 +1,9 @@
-import pytest
 import json
-import os
-from storage.json_storage import JSONStorage
+
+import pytest
+
 from models.aeroplane import Aeroplane
+from storage.json_storage import JSONStorage
 
 
 class TestJSONStorage:
@@ -47,12 +48,13 @@ class TestJSONStorage:
         """Проверка фильтрации данных из файла (покрываем метод get)."""
         # 1. Создаем хранилище, используя твой временный файл
         from storage.json_storage import JSONStorage
+
         storage = JSONStorage(filename=str(temp_file))
 
         # 2. Забиваем тестовые данные
         planes = [
             Aeroplane("icao1", "AFL123", "Russia", 10000.0, 800.0),
-            Aeroplane("icao2", "LOT456", "Poland", 5000.0, 400.0)
+            Aeroplane("icao2", "LOT456", "Poland", 5000.0, 400.0),
         ]
         storage.add_aeroplanes(planes)
 
@@ -91,11 +93,12 @@ class TestJSONStorage:
         """Проверка удаления данных из файла (покрываем метод delete)."""
         # 1. Готовим хранилище и данные
         from storage.json_storage import JSONStorage
+
         storage = JSONStorage(filename=str(temp_file))
 
         planes = [
             Aeroplane("icao1", "AFL123", "Russia", 10000.0, 800.0),
-            Aeroplane("icao2", "LOT456", "Poland", 5000.0, 400.0)
+            Aeroplane("icao2", "LOT456", "Poland", 5000.0, 400.0),
         ]
         storage.add_aeroplanes(planes)
 

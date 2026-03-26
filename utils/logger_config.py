@@ -1,5 +1,4 @@
 import logging
-import os
 from pathlib import Path
 
 
@@ -9,10 +8,10 @@ def setup_logging():
     log_dir.mkdir(exist_ok=True)
     log_file = log_dir / "navigator.log"
 
-    log_format = logging.Formatter('%(asctime)s [%(levelname)s] %(name)s: %(message)s')
+    log_format = logging.Formatter("%(asctime)s [%(levelname)s] %(name)s: %(message)s")
 
     # 1. Создаем обработчик для ФАЙЛА (Пишем ВСЁ)
-    file_handler = logging.FileHandler(str(log_file), encoding='utf-8')
+    file_handler = logging.FileHandler(str(log_file), encoding="utf-8")
     file_handler.setLevel(logging.INFO)  # Сюда летит вся инфа
     file_handler.setFormatter(log_format)
 
@@ -32,7 +31,5 @@ def setup_logging():
 
     return root_logger
 
+
 logger = setup_logging()
-
-
-
