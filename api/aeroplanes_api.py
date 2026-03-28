@@ -63,7 +63,13 @@ class AeroplanesAPI(BaseAPI):
             return []
         return self.get_aeroplanes(country)
 
-    def get_country_coordinates(self, country: str) -> Optional[Tuple[float, float]]:
+    def get_country_coordinates(self, country: str) -> Optional[Tuple[float, float, float, float]]:
+        """
+        Получение boundingbox страны через Nominatim API.
+
+        Returns:
+            Optional[Tuple[float, float, float, float]]: (south, north, west, east)
+        """
         logger.info(f"🌍 Поиск координат для страны: {country}")
         params = {"q": country, "format": "json", "limit": 1}
         headers = {"User-Agent": self.user_agent}
@@ -77,9 +83,14 @@ class AeroplanesAPI(BaseAPI):
                 logger.warning(f"❓ Страна '{country}' не найдена в базе Nominatim")
                 return None
 
-            lat, lon = float(data[0]["lat"]), float(data[0]["lon"])
-            logger.debug(f"📍 Координаты найдены: {lat}, {lon}")
-            return (lat, lon)
+            bbox = data[0].get("boundingbox")
+            if not bbox or len(bbox) != 4:
+                logger.warning(f"❓ Некорректный boundingbox для '{country}'")
+                return None
+
+            south, north, west, east = map(float, bbox)
+            logger.debug(f"📍 Boundingbox найден: {south}, {north}, {west}, {east}")
+            return (south, north, west, east)
 
         except (requests.RequestException, KeyError, ValueError, IndexError) as e:
             logger.error(f"❌ Критическая ошибка при поиске координат: {e}")
@@ -99,14 +110,12 @@ class AeroplanesAPI(BaseAPI):
         if not coords:
             return []
 
-        lat, lon = coords
-        logger.info(f"🛰️ Запрос самолетов в радиусе координат {lat}, {lon}")
-
-        bbox: dict[str, float] = {
-            "lamin": float(lat - 10),
-            "lamax": float(lat + 10),
-            "lomin": float(lon - 15),
-            "lomax": float(lon + 15),
+        south, north, west, east = coords
+        bbox = {
+            "lamin": south,
+            "lamax": north,
+            "lomin": west,
+            "lomax": east,
         }
         try:
             response = requests.get(self.opensky_url, params=bbox, timeout=10)

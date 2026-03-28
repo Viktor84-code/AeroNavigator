@@ -8,13 +8,13 @@ class TestAeroplanesAPI:
     def test_get_country_coordinates_success(self, mock_get):
         mock_response = Mock()
         mock_response.status_code = 200
-        mock_response.json.return_value = [{"lat": "55.0", "lon": "37.0"}]
+        mock_response.json.return_value = [{"boundingbox": ["35.0", "70.0", "-10.0", "60.0"]}]
         mock_get.return_value = mock_response
 
         api = AeroplanesAPI()
         coords = api.get_country_coordinates("Russia")
 
-        assert coords == (55.0, 37.0)
+        assert coords == (35.0, 70.0, -10.0, 60.0)
 
     @patch("api.aeroplanes_api.requests.get")
     def test_get_country_coordinates_failure(self, mock_get):
@@ -29,7 +29,7 @@ class TestAeroplanesAPI:
 
     @patch("api.aeroplanes_api.requests.get")
     def test_get_aeroplanes_success(self, mock_get):
-        with patch.object(AeroplanesAPI, "get_country_coordinates", return_value=(55.0, 37.0)):
+        with patch.object(AeroplanesAPI, "get_country_coordinates", return_value=(35.0, 70.0, -10.0, 60.0)):
             mock_response = Mock()
             mock_response.status_code = 200
             mock_response.json.return_value = {"states": [["abc123", "AFL123", "Russia", 0, 0, 0, 0, 10000, 0, 850]]}
@@ -63,8 +63,7 @@ class TestAeroplanesAPI:
 
     @patch("api.aeroplanes_api.requests.get")
     def test_get_aeroplanes_http_error(self, mock_get):
-        """Тест на ошибку HTTP при запросе самолётов (строки 39, 41-42)"""
-        with patch.object(AeroplanesAPI, "get_country_coordinates", return_value=(55.0, 37.0)):
+        with patch.object(AeroplanesAPI, "get_country_coordinates", return_value=(35.0, 70.0, -10.0, 60.0)):
             mock_response = Mock()
             mock_response.status_code = 500
             mock_get.return_value = mock_response
