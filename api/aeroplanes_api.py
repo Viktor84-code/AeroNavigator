@@ -1,22 +1,80 @@
-from typing import Any, Dict, List, Optional, Tuple
+"""
+Класс для работы с API Nominatim и OpenSky.
+
+Реализует получение координат стран и данных о самолётах.
+"""
 
 import requests
+import logging
+from typing import Dict, Any, List, Optional, Tuple
 
-from utils.logger_config import logger  # ПОДКЛЮЧАЕМ НАШ САМОПИСЕЦ
+from api.base_api import BaseAPI
+
+logger = logging.getLogger(__name__)
 
 
-class AeroplanesAPI:
+class AeroplanesAPI(BaseAPI):
+    """
+    Класс для работы с API Nominatim и OpenSky.
+
+    Позволяет получать координаты стран через Nominatim
+    и данные о самолётах через OpenSky API.
+    """
+
     def __init__(self, user_agent: str = "AeroNavigator/1.0 (viktor84.code@gmail.com)"):
-        self.nominatim_url = "https://nominatim.openstreetmap.org/search"
+        """
+        Инициализация клиента API.
+
+        Args:
+            user_agent: Строка User-Agent для Nominatim API.
+        """
+        super().__init__(base_url="https://nominatim.openstreetmap.org/search")
         self.opensky_url = "https://opensky-network.org/api/states/all"
         self.user_agent = user_agent
 
+    def _connect(self) -> bool:
+        """
+        Проверка подключения к OpenSky API.
+
+        Returns:
+            bool: True, если подключение успешно, иначе False.
+        """
+        try:
+            response = requests.get(self.opensky_url, params={"lamin": 0, "lamax": 0}, timeout=5)
+            return response.status_code == 200
+        except requests.RequestException:
+            return False
+
+    def get_data(self, params: Dict[str, Any]) -> List[Dict[str, Any]]:
+        """
+        Получение данных по параметрам (например, по стране).
+
+        Args:
+            params: Словарь с параметрами запроса (должен содержать ключ "country").
+
+        Returns:
+            List[Dict[str, Any]]: Список данных о самолётах.
+        """
+        country = params.get("country")
+        if not country:
+            return []
+        return self.get_aeroplanes(country)
+
     def get_country_coordinates(self, country: str) -> Optional[Tuple[float, float]]:
+        """
+        Получение координат страны через Nominatim API.
+
+        Args:
+            country: Название страны на английском.
+
+        Returns:
+            Optional[Tuple[float, float]]: Кортеж (широта, долгота) или None при ошибке.
+        """
         logger.info(f"🌍 Поиск координат для страны: {country}")
         params = {"q": country, "format": "json", "limit": 1}
         headers = {"User-Agent": self.user_agent}
         try:
-            response = requests.get(self.nominatim_url, params=params, headers=headers)
+            response = requests.get(self._base_url, params=params, headers=headers)
             if response.status_code != 200:
                 logger.warning(f"⚠️ Ошибка Nominatim: Код {response.status_code}")
                 return None
@@ -34,6 +92,15 @@ class AeroplanesAPI:
             return None
 
     def get_aeroplanes(self, country: str) -> List[Dict[str, Any]]:
+        """
+        Получение данных о самолётах в воздушном пространстве страны.
+
+        Args:
+            country: Название страны на английском.
+
+        Returns:
+            List[Dict[str, Any]]: Список данных о самолётах в формате OpenSky.
+        """
         coords = self.get_country_coordinates(country)
         if not coords:
             return []

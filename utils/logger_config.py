@@ -1,3 +1,5 @@
+"""Настройка логирования для проекта."""
+
 import logging
 from pathlib import Path
 
