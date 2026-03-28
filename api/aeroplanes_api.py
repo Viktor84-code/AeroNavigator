@@ -31,6 +31,7 @@ class AeroplanesAPI(BaseAPI):
             user_agent: Строка User-Agent для Nominatim API.
         """
         super().__init__(base_url="https://nominatim.openstreetmap.org/search")
+        self.nominatim_url = "https://nominatim.openstreetmap.org/search"
         self.opensky_url = "https://opensky-network.org/api/states/all"
         self.user_agent = user_agent
 
@@ -63,20 +64,11 @@ class AeroplanesAPI(BaseAPI):
         return self.get_aeroplanes(country)
 
     def get_country_coordinates(self, country: str) -> Optional[Tuple[float, float]]:
-        """
-        Получение координат страны через Nominatim API.
-
-        Args:
-            country: Название страны на английском.
-
-        Returns:
-            Optional[Tuple[float, float]]: Кортеж (широта, долгота) или None при ошибке.
-        """
         logger.info(f"🌍 Поиск координат для страны: {country}")
         params = {"q": country, "format": "json", "limit": 1}
         headers = {"User-Agent": self.user_agent}
         try:
-            response = requests.get(self.opensky_url, params=params, headers=headers)
+            response = requests.get(self.nominatim_url, params=params, headers=headers)
             if response.status_code != 200:
                 logger.warning(f"⚠️ Ошибка Nominatim: Код {response.status_code}")
                 return None
