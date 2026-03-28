@@ -1,12 +1,7 @@
 import pytest
 
 from models.aeroplane import Aeroplane
-from utils.helpers import (
-    filter_by_altitude,
-    filter_by_country,
-    get_top_n,
-    sort_by_altitude,
-)
+from utils.helpers import filter_by_altitude, filter_by_country, get_top_n, sort_by_altitude
 
 
 @pytest.fixture

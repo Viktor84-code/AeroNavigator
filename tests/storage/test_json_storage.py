@@ -113,3 +113,20 @@ class TestJSONStorage:
 
         # 4. Проверка удаления без критериев (должно вернуть 0 по твоей логике)
         assert storage.delete() == 0
+
+    def test_add_single_aeroplane(self, temp_file):
+        """Тест добавления одного самолёта через метод add()"""
+        storage = JSONStorage(filename=str(temp_file))
+
+        plane = Aeroplane("abc123", "AFL123", "Russia", 10000.0, 850.0)
+        storage.add(plane)
+
+        with open(temp_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+        assert len(data) == 1
+        assert data[0]["icao24"] == "abc123"
+        assert data[0]["callsign"] == "AFL123"
+        assert data[0]["country"] == "Russia"
+        assert data[0]["altitude"] == 10000.0
+        assert data[0]["velocity"] == 850.0

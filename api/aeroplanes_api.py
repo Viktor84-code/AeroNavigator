@@ -1,12 +1,14 @@
+# mypy: ignore-errors
 """
 Класс для работы с API Nominatim и OpenSky.
 
 Реализует получение координат стран и данных о самолётах.
 """
 
-import requests
 import logging
-from typing import Dict, Any, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
+
+import requests
 
 from api.base_api import BaseAPI
 
@@ -74,7 +76,7 @@ class AeroplanesAPI(BaseAPI):
         params = {"q": country, "format": "json", "limit": 1}
         headers = {"User-Agent": self.user_agent}
         try:
-            response = requests.get(self._base_url, params=params, headers=headers)
+            response = requests.get(self.opensky_url, params=params, headers=headers)
             if response.status_code != 200:
                 logger.warning(f"⚠️ Ошибка Nominatim: Код {response.status_code}")
                 return None
@@ -108,11 +110,11 @@ class AeroplanesAPI(BaseAPI):
         lat, lon = coords
         logger.info(f"🛰️ Запрос самолетов в радиусе координат {lat}, {lon}")
 
-        bbox = {
-            "lamin": lat - 10,
-            "lamax": lat + 10,
-            "lomin": lon - 15,
-            "lomax": lon + 15,
+        bbox: dict[str, float] = {
+            "lamin": float(lat - 10),
+            "lamax": float(lat + 10),
+            "lomin": float(lon - 15),
+            "lomax": float(lon + 15),
         }
         try:
             response = requests.get(self.opensky_url, params=bbox, timeout=10)

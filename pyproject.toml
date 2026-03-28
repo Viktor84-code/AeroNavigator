@@ -25,6 +25,8 @@ build-backend = "poetry.core.masonry.api"
 [tool.mypy]
 python_version = "3.13"
 ignore_missing_imports = true
+explicit_package_bases = true
+namespace_packages = true
 
 [tool.black]
 line-length = 119

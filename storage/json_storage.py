@@ -3,7 +3,7 @@
 """
 
 import json
-from typing import List, Dict, Any
+from typing import Any, Dict, List
 
 from models.aeroplane import Aeroplane
 from storage.base_storage import BaseStorage
@@ -37,13 +37,15 @@ class JSONStorage(BaseStorage):
         existing_icao = {a["icao24"] for a in existing}
 
         if item.icao24 not in existing_icao:
-            existing.append({
-                "icao24": item.icao24,
-                "callsign": item.callsign,
-                "country": item.country,
-                "altitude": item.altitude,
-                "velocity": item.velocity,
-            })
+            existing.append(
+                {
+                    "icao24": item.icao24,
+                    "callsign": item.callsign,
+                    "country": item.country,
+                    "altitude": item.altitude,
+                    "velocity": item.velocity,
+                }
+            )
             self._save(existing)
             logger.info(f"✅ Добавлен самолёт {item.callsign} в {self._filename}")
 
@@ -60,13 +62,15 @@ class JSONStorage(BaseStorage):
         added_count = 0
         for a in aeroplanes:
             if a.icao24 not in existing_icao:
-                existing.append({
-                    "icao24": a.icao24,
-                    "callsign": a.callsign,
-                    "country": a.country,
-                    "altitude": a.altitude,
-                    "velocity": a.velocity,
-                })
+                existing.append(
+                    {
+                        "icao24": a.icao24,
+                        "callsign": a.callsign,
+                        "country": a.country,
+                        "altitude": a.altitude,
+                        "velocity": a.velocity,
+                    }
+                )
                 existing_icao.add(a.icao24)
                 added_count += 1
 

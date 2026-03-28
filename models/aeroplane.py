@@ -21,7 +21,7 @@ class Aeroplane:
         velocity (float): Скорость полёта в метрах в секунду.
     """
 
-    __slots__ = ('_icao24', '_callsign', '_country', '_altitude', '_velocity')
+    __slots__ = ("_icao24", "_callsign", "_country", "_altitude", "_velocity")
 
     def __init__(
         self,
@@ -89,16 +89,18 @@ class Aeroplane:
         return float(value)
 
     # Магические методы сравнения
-    def __lt__(self, other: 'Aeroplane') -> bool:
+    def __lt__(self, other: "Aeroplane") -> bool:
         """Сравнивает самолёты по высоте (меньше)."""
         return self._altitude < other._altitude
 
-    def __gt__(self, other: 'Aeroplane') -> bool:
+    def __gt__(self, other: "Aeroplane") -> bool:
         """Сравнивает самолёты по высоте (больше)."""
         return self._altitude > other._altitude
 
-    def __eq__(self, other: 'Aeroplane') -> bool:
+    def __eq__(self, other: object) -> bool:
         """Сравнивает самолёты по высоте (равно)."""
+        if not isinstance(other, Aeroplane):
+            return NotImplemented
         return self._altitude == other._altitude
 
     @classmethod
