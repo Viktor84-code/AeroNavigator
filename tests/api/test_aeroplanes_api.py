@@ -1,5 +1,7 @@
 from unittest.mock import Mock, patch
 
+import requests
+
 from api.aeroplanes_api import AeroplanesAPI
 
 
@@ -72,3 +74,34 @@ class TestAeroplanesAPI:
             data = api.get_aeroplanes("Russia")
 
             assert data == []
+
+    @patch("api.aeroplanes_api.requests.get")
+    def test_connect_success(self, mock_get):
+        mock_response = Mock()
+        mock_response.status_code = 200
+        mock_get.return_value = mock_response
+
+        api = AeroplanesAPI()
+        result = api._connect()
+
+        assert result is True
+
+    @patch("api.aeroplanes_api.requests.get")
+    def test_connect_failure(self, mock_get):
+        mock_response = Mock()
+        mock_response.status_code = 500
+        mock_get.return_value = mock_response
+
+        api = AeroplanesAPI()
+        result = api._connect()
+
+        assert result is False
+
+    @patch("api.aeroplanes_api.requests.get")
+    def test_connect_exception(self, mock_get):
+        mock_get.side_effect = requests.RequestException
+
+        api = AeroplanesAPI()
+        result = api._connect()
+
+        assert result is False

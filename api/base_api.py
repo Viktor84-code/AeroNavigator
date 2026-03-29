@@ -1,3 +1,5 @@
+"""Абстрактный базовый класс для работы с внешними API."""
+
 from abc import ABC, abstractmethod
 from typing import Any, Dict, List
 

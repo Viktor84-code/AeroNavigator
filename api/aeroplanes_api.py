@@ -31,9 +31,9 @@ class AeroplanesAPI(BaseAPI):
             user_agent: Строка User-Agent для Nominatim API.
         """
         super().__init__(base_url="https://nominatim.openstreetmap.org/search")
-        self.nominatim_url = "https://nominatim.openstreetmap.org/search"
-        self.opensky_url = "https://opensky-network.org/api/states/all"
-        self.user_agent = user_agent
+        self._nominatim_url = "https://nominatim.openstreetmap.org/search"
+        self._opensky_url = "https://opensky-network.org/api/states/all"
+        self._user_agent = user_agent
 
     def _connect(self) -> bool:
         """
@@ -43,7 +43,7 @@ class AeroplanesAPI(BaseAPI):
             bool: True, если подключение успешно, иначе False.
         """
         try:
-            response = requests.get(self.opensky_url, params={"lamin": 0, "lamax": 0}, timeout=5)
+            response = requests.get(self._base_url, params={"q": "test", "format": "json", "limit": 1}, timeout=5)
             return response.status_code == 200
         except requests.RequestException:
             return False
@@ -72,9 +72,9 @@ class AeroplanesAPI(BaseAPI):
         """
         logger.info(f"🌍 Поиск координат для страны: {country}")
         params = {"q": country, "format": "json", "limit": 1}
-        headers = {"User-Agent": self.user_agent}
+        headers = {"User-Agent": self._user_agent}
         try:
-            response = requests.get(self.nominatim_url, params=params, headers=headers)
+            response = requests.get(self._nominatim_url, params=params, headers=headers)
             if response.status_code != 200:
                 logger.warning(f"⚠️ Ошибка Nominatim: Код {response.status_code}")
                 return None
@@ -110,6 +110,10 @@ class AeroplanesAPI(BaseAPI):
         if not coords:
             return []
 
+        # if not self._connect():
+        #    logger.error("❌ Нет подключения к API")
+        #    return []
+
         south, north, west, east = coords
         bbox = {
             "lamin": south,
@@ -118,7 +122,7 @@ class AeroplanesAPI(BaseAPI):
             "lomax": east,
         }
         try:
-            response = requests.get(self.opensky_url, params=bbox, timeout=10)
+            response = requests.get(self._opensky_url, params=bbox, timeout=10)
             if response.status_code != 200:
                 logger.error(f"❌ Ошибка OpenSky API: Код {response.status_code}")
                 return []

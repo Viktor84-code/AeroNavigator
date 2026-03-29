@@ -104,7 +104,7 @@ class Aeroplane:
         return self._altitude == other._altitude
 
     @classmethod
-    def cast_to_object_list(cls, data: List[List[Any]]) -> List["Aeroplane"]:
+    def cast_to_object_list(cls, data: List[Any]) -> List["Aeroplane"]:
         """
         Преобразует данные OpenSky в список объектов Aeroplane.
 
@@ -122,7 +122,7 @@ class Aeroplane:
                         icao24=item[0],
                         callsign=item[1],
                         country=item[2],
-                        altitude=item[7],
+                        altitude=item[13] if len(item) > 13 and item[13] is not None else item[7],
                         velocity=item[9],
                     )
                 )

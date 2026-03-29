@@ -1,6 +1,4 @@
-"""
-Абстрактный базовый класс для работы с хранилищем данных.
-"""
+"""Абстрактный базовый класс для работы с хранилищем данных."""
 
 from abc import ABC, abstractmethod
 from typing import Any, Dict, List

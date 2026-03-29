@@ -5,6 +5,7 @@ from pathlib import Path
 
 
 def setup_logging():
+    """Настройка логирования: файл и консоль."""
     base_dir = Path(__file__).resolve().parent.parent
     log_dir = base_dir / "logs"
     log_dir.mkdir(exist_ok=True)
