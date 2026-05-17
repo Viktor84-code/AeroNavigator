@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-"""
-Точка входа в программу мониторинга самолетов
-Запускаем интерактивный CLI-интерфейс для работы с API OpenSky и Nominatim.
+"""Точка входа в программу мониторинга самолётов.
+
+Запускает интерактивный CLI-интерфейс для работы с API OpenSky и Nominatim.
 """
 
 import sys
@@ -9,13 +9,7 @@ import sys
 from api.aeroplanes_api import AeroplanesAPI
 from models.aeroplane import Aeroplane
 from storage.json_storage import JSONStorage
-from utils.helpers import (
-    filter_by_altitude,
-    filter_by_country,
-    get_top_n,
-    print_aeroplanes,
-    sort_by_altitude,
-)
+from utils.helpers import filter_by_altitude, filter_by_country, get_top_n, print_aeroplanes, sort_by_altitude
 from utils.logger_config import logger
 
 
@@ -29,7 +23,6 @@ def user_interaction() -> None:
     - отфильтровать самолеты по стране регистрации
     - отфильтровать по диапазону высот
     """
-
     print("\n✈️ Добро пожаловать в AeroNavigator!\n")
 
     # Создаём экземпляры классов
