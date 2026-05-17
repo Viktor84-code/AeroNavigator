@@ -1,9 +1,17 @@
-from typing import List, Dict, Any, Optional
+from typing import Any, List, Optional
+
+from utils.logger_config import logger
 
 
 class Aeroplane:
-    def __init__(self, icao24: str, callsign: Optional[str], country: str,
-                 altitude: Optional[float], velocity: Optional[float]):
+    def __init__(
+        self,
+        icao24: str,
+        callsign: Optional[str],
+        country: str,
+        altitude: Optional[float],
+        velocity: Optional[float],
+    ):
         self.icao24 = icao24
         self.callsign = callsign or "N/A"
         self.country = country
@@ -16,11 +24,16 @@ class Aeroplane:
         aeroplanes = []
         for item in data:
             if len(item) >= 10:
-                aeroplanes.append(cls(
-                    icao24=item[0],
-                    callsign=item[1],
-                    country=item[2],
-                    altitude=item[7],
-                    velocity=item[9]
-                ))
+                aeroplanes.append(
+                    cls(
+                        icao24=item[0],
+                        callsign=item[1],
+                        country=item[2],
+                        altitude=item[7],
+                        velocity=item[9],
+                    )
+                )
+
+        # (DEBUG — не лезет в консоль, но виден в файле)
+        logger.debug(f"Моделирование: создано {len(aeroplanes)} объектов из сырых данных")
         return aeroplanes

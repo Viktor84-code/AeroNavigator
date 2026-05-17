@@ -3,6 +3,7 @@
 """
 
 from typing import List
+
 from models.aeroplane import Aeroplane
 
 
@@ -34,4 +35,6 @@ def print_aeroplanes(aeroplanes: List[Aeroplane], title: str = "") -> None:
         print("Нет самолётов, соответствующих критериям.")
         return
     for plane in aeroplanes:
-        print(f"  {plane.callsign} | {plane.country} | высота: {plane.altitude:.0f} м | скорость: {plane.velocity:.0f} м/с")
+        print(
+            f"{plane.callsign} | {plane.country} | высота: {plane.altitude:.0f} м | скорость: {plane.velocity:.0f} м/с"
+        )

@@ -16,17 +16,21 @@ black = "^24.0.0"
 isort = "^5.13.0"
 flake8 = "^7.0.0"
 mypy = "^1.8.0"
+pytest-html = "^4.2.0"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.black]
-line-length = 88
-
-[tool.isort]
-profile = "black"
-
 [tool.mypy]
 python_version = "3.13"
 ignore_missing_imports = true
+
+[tool.black]
+line-length = 119
+target-version = ['py313']
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
+line_length = 119
